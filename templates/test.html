@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Taking the Test — {{ user_name }}{% endblock %}
+{% block title %}أداء الاختبار — {{ user_name }}{% endblock %}
 {% block content %}
-<div class="card test-card">
+<div class="card test-card rtl">
     <div class="test-header">
         <div>
-            <h2>📝 CEFR Placement Test</h2>
+            <h2>📝 اختبار تحديد المستوى</h2>
             <div class="test-meta">
                 <span>👤 {{ user_name }}</span>
                 <span>🆔 {{ user_id }}</span>
             </div>
         </div>
         <div class="timer-box floating-timer" id="timerBox">
-            <div class="timer-label">Time Remaining</div>
+            <div class="timer-label">الوقت المتبقي</div>
             <div class="timer-value" id="timerValue">45:00</div>
         </div>
     </div>
@@ -23,35 +23,37 @@
                 {% set current_section = q.section %}
                 <div class="section-divider">
                     {% if q.section == 1 %}
-                        <h3>Section 1: Elementary & Basic Grammar (Q1–15)</h3>
+                        <h3>القسم الأول: المستوى المبتدئ (A1) - الأسئلة 1 إلى 6</h3>
                     {% elif q.section == 2 %}
-                        <h3>Section 2: Intermediate Grammar & Usage (Q16–35)</h3>
+                        <h3>القسم الثاني: المستوى فوق المبتدئ (A2) - الأسئلة 7 إلى 12</h3>
+                    {% elif q.section == 3 %}
+                        <h3>القسم الثالث: المستوى المتوسط (B1 & B2) - الأسئلة 13 إلى 19</h3>
                     {% else %}
-                        <h3>Section 3: Upper-Intermediate & Advanced Grammar (Q36–50)</h3>
+                        <h3>القسم الرابع: المستوى المتقدم (C1 & C2) - الأسئلة 20 إلى 25</h3>
                     {% endif %}
                 </div>
             {% endif %}
 
             <div class="question">
-                <p class="q-text"><strong>Q{{ q.question_number }}.</strong> {{ q.question_text }}</p>
+                <p class="q-text"><strong>س{{ q.question_number }}.</strong> {{ q.question_text }}</p>
                 <div class="options">
-                    <label><input type="radio" name="q{{ q.question_number }}" value="A" required> A) {{ q.option_a }}</label>
-                    <label><input type="radio" name="q{{ q.question_number }}" value="B"> B) {{ q.option_b }}</label>
-                    <label><input type="radio" name="q{{ q.question_number }}" value="C"> C) {{ q.option_c }}</label>
-                    <label><input type="radio" name="q{{ q.question_number }}" value="D"> D) {{ q.option_d }}</label>
+                    <label><input type="radio" name="q{{ q.question_number }}" value="A" required> أ) {{ q.option_a }}</label>
+                    <label><input type="radio" name="q{{ q.question_number }}" value="B"> ب) {{ q.option_b }}</label>
+                    <label><input type="radio" name="q{{ q.question_number }}" value="C"> ج) {{ q.option_c }}</label>
+                    <label><input type="radio" name="q{{ q.question_number }}" value="D"> د) {{ q.option_d }}</label>
                 </div>
             </div>
         {% endfor %}
 
         <button type="submit" class="btn-primary btn-submit" id="submitBtn">
-            Submit Test ✓
+            تسليم الاختبار ✓
         </button>
     </form>
 </div>
 
 <script>
 (function() {
-    const TOTAL_SECONDS = 45 * 60; // 45 minutes
+    const TOTAL_SECONDS = 45 * 60;
     let remaining = TOTAL_SECONDS;
     const timerValue = document.getElementById('timerValue');
     const timerBox = document.getElementById('timerBox');
@@ -64,15 +66,11 @@
         const s = remaining % 60;
         timerValue.textContent = `${pad(m)}:${pad(s)}`;
 
-        if (remaining <= 300) {
-            timerBox.classList.add('warning');
-        }
-        if (remaining <= 60) {
-            timerBox.classList.add('danger');
-        }
+        if (remaining <= 300) timerBox.classList.add('warning');
+        if (remaining <= 60) timerBox.classList.add('danger');
         if (remaining <= 0) {
             timerValue.textContent = "00:00";
-            alert("⏰ Time is up! Your test will be submitted automatically.");
+            alert("⏰ انتهى الوقت! سيتم تسليم الاختبار تلقائياً.");
             form.submit();
         }
         remaining--;
@@ -85,7 +83,7 @@
         const unanswered = form.querySelectorAll('input[type=radio]:required').length;
         const answered = new Set([...form.querySelectorAll('input[type=radio]:checked')].map(r => r.name)).size;
         if (answered < unanswered) {
-            if (!confirm(`You have answered ${answered} out of ${unanswered} questions. Submit anyway?`)) {
+            if (!confirm(`لقد أجبت على ${answered} من أصل ${unanswered} سؤالاً. هل تريد التسليم؟`)) {
                 e.preventDefault();
             }
         }
