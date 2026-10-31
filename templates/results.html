@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Your Results{% endblock %}
+{% block content %}
+<div class="card results-card">
+    <h1>🎯 Test Completed</h1>
+    <p class="subtitle">Thank you for taking the CEFR Placement Test.</p>
+
+    <div class="score-display">
+        <div class="big-score">{{ score }}<span>/{{ total }}</span></div>
+        <div class="score-label">Total Score</div>
+    </div>
+
+    <div class="level-box">
+        <div class="level-row">
+            <span class="label">Your CEFR Level:</span>
+            <span class="value level-badge">{{ level }}</span>
+        </div>
+        <div class="level-row">
+            <span class="label">Recommended Module:</span>
+            <span class="value">{{ module }}</span>
+        </div>
+    </div>
+
+    <div class="section-scores">
+        <h3>Section Breakdown</h3>
+        <div class="bar-group">
+            <span>Section 1 (Elementary):</span>
+            <div class="bar"><div class="fill" style="width: {{ (s1/15)*100 }}%"></div></div>
+            <span class="num">{{ s1 }}/15</span>
+        </div>
+        <div class="bar-group">
+            <span>Section 2 (Intermediate):</span>
+            <div class="bar"><div class="fill" style="width: {{ (s2/20)*100 }}%"></div></div>
+            <span class="num">{{ s2 }}/20</span>
+        </div>
+        <div class="bar-group">
+            <span>Section 3 (Advanced):</span>
+            <div class="bar"><div class="fill" style="width: {{ (s3/15)*100 }}%"></div></div>
+            <span class="num">{{ s3 }}/15</span>
+        </div>
+    </div>
+
+    <p class="note">📞 A KG Academy advisor will contact you shortly to discuss your results and enrollment.</p>
+
+    <a href="{{ url_for('index') }}" class="btn-primary">← Back to Home</a>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}KG Academy - CEFR Placement Test{% endblock %}
+{% block content %}
+<div class="card landing">
+    <h1>📝 General English CEFR Diagnostic Test</h1>
+    <p class="subtitle">50 Questions · 45 Minutes · Instant CEFR Level Assignment</p>
+
+    <div class="info-box">
+        <h3>Before you start:</h3>
+        <ul>
+            <li>The test contains <strong>50 multiple-choice questions</strong> across 3 sections.</li>
+            <li>You have <strong>45 minutes</strong> to complete it. A timer will run automatically.</li>
+            <li>Choose the <strong>best answer (A, B, C, or D)</strong> for each question.</li>
+            <li>Your score will determine your CEFR level (A0 → B2+) and recommended module.</li>
+        </ul>
+    </div>
+
+    <form method="POST" action="{{ url_for('start') }}" class="start-form">
+        <label for="name">Full Name <span class="required">*</span></label>
+        <input type="text" id="name" name="name" required placeholder="e.g. Sara Ahmed">
+
+        <label for="email">Email Address <span class="required">*</span></label>
+        <input type="email" id="email" name="email" required placeholder="you@example.com">
+
+        <label for="phone">Phone Number <span class="required">*</span></label>
+        <input type="tel" id="phone" name="phone" required placeholder="+968 9XXX XXXX">
+
+        <label for="center">KG Academy Branch <span class="required">*</span></label>
+        <select id="center" name="center" required>
+            <option value="">-- Select your branch --</option>
+            {% for c in centers %}
+            <option value="{{ c }}">{{ c }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn-primary">Start Test →</button>
+    </form>
+</div>
+{% endblock %}

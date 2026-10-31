@@ -1,0 +1,274 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 10px;
+    color: #333;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+
+/* Header with logo */
+.site-header {
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.logo-wrap { display: flex; align-items: center; gap: 16px; }
+.kg-logo { height: 60px; width: auto; }
+.logo-text { line-height: 1.2; }
+.logo-ar { font-size: 1.3em; font-weight: 700; color: #4a3f8f; }
+.logo-en { font-size: 0.95em; color: #666; letter-spacing: 1px; }
+
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+}
+h1 { color: #4a3f8f; margin-bottom: 12px; font-size: 1.6em; }
+h2 { color: #4a3f8f; }
+h3 { color: #5a4fa0; margin: 8px 0; }
+.subtitle { color: #666; font-size: 1em; margin-bottom: 20px; }
+.info-box {
+    background: #f5f3ff;
+    border-left: 4px solid #667eea;
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin: 16px 0;
+}
+.info-box ul { margin-left: 20px; margin-top: 8px; }
+.info-box li { margin: 4px 0; }
+
+.start-form label { display: block; margin-top: 12px; font-weight: 600; font-size: 0.95em; }
+.start-form input, .start-form select {
+    width: 100%; padding: 10px 12px; margin-top: 6px;
+    border: 1px solid #ccc; border-radius: 6px; font-size: 1em;
+}
+.required { color: #e74c3c; }
+.btn-primary {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff; border: none; padding: 10px 22px;
+    font-size: 0.95em; font-weight: 600; border-radius: 8px;
+    cursor: pointer; margin-top: 16px; text-decoration: none;
+    transition: transform 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-secondary {
+    display: inline-block;
+    background: #2ecc71;
+    color: #fff; border: none; padding: 10px 18px;
+    font-size: 0.9em; font-weight: 600; border-radius: 8px;
+    cursor: pointer; text-decoration: none; margin-left: 8px;
+}
+.btn-danger {
+    display: inline-block;
+    background: #e74c3c;
+    color: #fff; border: none; padding: 10px 18px;
+    font-size: 0.9em; font-weight: 600; border-radius: 8px;
+    cursor: pointer; text-decoration: none; margin-left: 8px;
+}
+.btn-submit { width: 100%; font-size: 1.1em; }
+.flash { padding: 10px; border-radius: 6px; margin-bottom: 12px; }
+.flash.error { background: #fee; color: #c33; border: 1px solid #fcc; }
+.flash.success { background: #efe; color: #2a7; border: 1px solid #cfc; }
+
+/* Test page */
+.test-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    border-bottom: 2px solid #eee; padding-bottom: 12px; margin-bottom: 16px;
+    flex-wrap: wrap; gap: 12px;
+}
+.test-meta span { margin-right: 14px; color: #666; font-size: 0.9em; }
+.timer-box {
+    background: #f5f3ff;
+    border: 2px solid #667eea;
+    border-radius: 10px;
+    padding: 10px 16px;
+    text-align: center;
+    min-width: 130px;
+}
+.timer-label { font-size: 0.75em; color: #666; text-transform: uppercase; }
+.timer-value { font-size: 1.8em; font-weight: 700; color: #4a3f8f; font-variant-numeric: tabular-nums; }
+.timer-box.warning { border-color: #f39c12; }
+.timer-box.warning .timer-value { color: #f39c12; }
+.timer-box.danger { border-color: #e74c3c; animation: pulse 1s infinite; }
+.timer-box.danger .timer-value { color: #e74c3c; }
+@keyframes pulse { 50% { opacity: 0.6; } }
+
+.section-divider {
+    background: #f5f3ff; padding: 10px 14px; border-radius: 8px;
+    margin: 20px 0 10px; border-left: 4px solid #667eea;
+}
+.question { margin: 14px 0; padding: 14px; background: #fafafa; border-radius: 8px; }
+.q-text { font-size: 1em; margin-bottom: 10px; line-height: 1.5; }
+.options label {
+    display: block; padding: 8px 12px; margin: 5px 0;
+    background: #fff; border: 1px solid #ddd; border-radius: 6px;
+    cursor: pointer; transition: all 0.15s; font-size: 0.95em;
+}
+.options label:hover { background: #f0edff; border-color: #667eea; }
+.options input { margin-right: 8px; }
+
+/* Results */
+.score-display { text-align: center; margin: 16px 0; }
+.big-score { font-size: 3.5em; font-weight: 700; color: #4a3f8f; }
+.big-score span { font-size: 0.5em; color: #999; }
+.score-label { font-size: 1.1em; color: #666; }
+.level-box {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff; padding: 16px; border-radius: 10px; margin: 16px 0;
+}
+.level-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 1em; flex-wrap: wrap; }
+.level-badge {
+    background: #fff; color: #4a3f8f; padding: 4px 12px;
+    border-radius: 20px; font-weight: 700;
+}
+.section-scores { margin: 20px 0; }
+.bar-group { display: flex; align-items: center; gap: 10px; margin: 8px 0; flex-wrap: wrap; }
+.bar-group > span:first-child { flex: 0 0 180px; font-size: 0.9em; }
+.bar { flex: 1; background: #eee; height: 16px; border-radius: 8px; overflow: hidden; min-width: 100px; }
+.fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); }
+.num { flex: 0 0 60px; text-align: right; font-weight: 600; font-size: 0.9em; }
+.note { background: #fffbea; padding: 12px; border-radius: 6px; margin: 16px 0; border-left: 4px solid #f1c40f; }
+
+/* Admin */
+.admin-top {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
+}
+.admin-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.admin-user { font-size: 0.9em; color: #666; }
+
+.filter-form {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+    padding: 12px; background: #f5f3ff; border-radius: 8px;
+}
+.filter-form input, .filter-form select {
+    flex: 1; min-width: 140px; padding: 8px; border: 1px solid #ccc;
+    border-radius: 6px; font-size: 0.9em;
+}
+.filter-form .btn-primary, .filter-form .btn-secondary { margin-top: 0; padding: 8px 14px; font-size: 0.9em; }
+
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.85em; min-width: 900px; }
+.admin-table th, .admin-table td { padding: 8px; border: 1px solid #ddd; text-align: left; vertical-align: middle; }
+.admin-table th { background: #f5f3ff; font-size: 0.9em; }
+.admin-table .center-cell { font-size: 0.85em; }
+.admin-table .module-cell { font-size: 0.8em; }
+.status { padding: 3px 8px; border-radius: 12px; font-size: 0.85em; white-space: nowrap; }
+.status.enrolled { background: #d4edda; color: #155724; }
+.status.pending { background: #fff3cd; color: #856404; }
+
+.action-cell { white-space: nowrap; }
+.btn-small {
+    display: inline-block; padding: 4px 10px; font-size: 0.8em;
+    background: #667eea; color: #fff; border: none; border-radius: 4px;
+    cursor: pointer; text-decoration: none; margin: 2px;
+}
+.btn-enroll { background: #2ecc71; }
+
+.change-pw { margin-top: 24px; }
+.change-pw summary {
+    cursor: pointer; font-weight: 600; padding: 10px;
+    background: #f5f3ff; border-radius: 6px;
+}
+
+/* Admin login */
+.admin-login-card { max-width: 450px; margin: 40px auto; }
+
+/* Review table */
+.review-table { width: 100%; border-collapse: collapse; font-size: 0.85em; margin-top: 12px; }
+.review-table th, .review-table td { padding: 6px 8px; text-align: left; border-bottom: 1px solid #eee; }
+.review-table th { background: #f5f3ff; }
+.review-table tr.correct td { background: #f0fff0; }
+.review-table tr.wrong td { background: #fff5f5; }
+
+.student-info { background: #f9f9ff; padding: 14px; border-radius: 8px; margin: 12px 0; }
+.info-row { padding: 4px 0; font-size: 0.95em; }
+.info-row code { background: #eee; padding: 2px 6px; border-radius: 4px; }
+
+.site-footer { text-align: center; color: #fff; padding: 16px; font-size: 0.9em; opacity: 0.9; }
+
+@media (max-width: 768px) {
+    .logo-wrap { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .kg-logo { height: 50px; }
+    .logo-ar { font-size: 1.1em; }
+    .card { padding: 16px; }
+    h1 { font-size: 1.3em; }
+    .test-header { flex-direction: column; }
+    .timer-box { width: 100%; }
+    .bar-group > span:first-child { flex: 0 0 100%; }
+    .admin-top { flex-direction: column; align-items: flex-start; }
+    .admin-actions { width: 100%; justify-content: flex-start; }
+    .filter-form { flex-direction: column; }
+    .filter-form input, .filter-form select { min-width: 100%; }
+    .big-score { font-size: 2.8em; }
+}
+
+/* =========================================
+   FLOATING TIMER STYLES
+   ========================================= */
+
+/* Base floating styles (applies to all screens) */
+.floating-timer {
+    background: #ffffff; /* Solid white background so it doesn't blend with text */
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    padding: 12px 20px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
+    z-index: 1000; /* Ensures it stays on top of everything */
+    transition: all 0.3s ease;
+}
+
+.floating-timer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.35);
+}
+
+/* Desktop: Fixed to the top-right */
+@media (min-width: 769px) {
+    .floating-timer {
+        position: fixed;
+        top: 110px; /* Positions it just below the KG Academy header */
+        right: 30px;
+        min-width: 140px;
+    }
+    
+    /* Add a little padding to the right side of the test card 
+       so text doesn't hide underneath the floating timer */
+    .test-card {
+        padding-right: 40px; 
+    }
+}
+
+/* Mobile: Fixed to the bottom-right as a compact pill */
+@media (max-width: 768px) {
+    .floating-timer {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        top: auto; /* Reset the top property */
+        padding: 8px 16px;
+        min-width: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 30px; /* Make it pill-shaped on mobile */
+    }
+    
+    /* Hide the "Time Remaining" label on mobile to save screen space */
+    .floating-timer .timer-label {
+        display: none; 
+    }
+    
+    .floating-timer .timer-value {
+        font-size: 1.4em;
+        margin: 0;
+    }
+}
