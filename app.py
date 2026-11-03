@@ -1,10 +1,13 @@
+"""
+CEFR Placement Test - Knowledge Grid Academy (ENGLISH VERSION)
+"""
 import json, sqlite3, hashlib, random, string, io
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 from openpyxl import Workbook
 
 app = Flask(__name__)
-app.secret_key = "kg-academy-arabic-2026"
+app.secret_key = "kg-academy-english-2026"
 DB_PATH = "cefr_test.db"
 
 CENTERS = [
@@ -24,7 +27,7 @@ def generate_user_id():
     year = datetime.now().year
     while True:
         suffix = "".join(random.choices(string.ascii_uppercase + string.digits, k=4))
-        uid = f"KG-AR-{year}-{suffix}"
+        uid = f"KG-EN-{year}-{suffix}"
         conn = get_db()
         if not conn.execute("SELECT id FROM users WHERE user_id=?", (uid,)).fetchone():
             conn.close()
@@ -33,11 +36,11 @@ def generate_user_id():
 
 def get_cefr_mapping(score):
     mapping = [
-        (0, 2, "A1", "Module 1: Beginners - 1"), (3, 4, "A1", "Module 2: Beginners - 2"),
-        (5, 6, "A2", "Module 3: Elementary - 1"), (7, 8, "A2", "Module 4: Elementary - 2"),
-        (9, 10, "B1", "Module 5: Pre-Intermediate - 1"), (11, 12, "B1", "Module 6: Pre-Intermediate - 2"),
-        (13, 14, "B2", "Module 7: Intermediate - 1"), (15, 17, "B2", "Module 8: Intermediate - 2"),
-        (18, 20, "C1", "Module 9: Upper-Intermediate - 1"), (21, 25, "C2", "Module 10: Upper-Intermediate - 2"),
+        (0, 5, "A0", "Module 1: Beginners - 1"), (6, 10, "A0", "Module 2: Beginners - 2"),
+        (11, 15, "A1", "Module 3: Elementary - 1"), (16, 20, "A2", "Module 4: Elementary - 2"),
+        (21, 25, "B1", "Module 5: Pre-Intermediate - 1"), (26, 30, "B1", "Module 6: Pre-Intermediate - 2"),
+        (31, 35, "B1+", "Module 7: Intermediate - 1"), (36, 40, "B2", "Module 8: Intermediate - 2"),
+        (41, 45, "B2+", "Module 9: Upper-Intermediate - 1"), (46, 50, "B2+", "Module 10: Upper-Intermediate - 2"),
     ]
     for low, high, level, module in mapping:
         if low <= score <= high: return level, module
@@ -69,7 +72,7 @@ def start():
     center = request.form.get("center", "").strip()
 
     if not name or not email or not phone or not center:
-        flash("يرجى ملء جميع الحقول المطلوبة.", "error")
+        flash("Please fill in all required fields.", "error")
         return redirect(url_for("index"))
 
     user_id = generate_user_id()
@@ -97,7 +100,7 @@ def submit():
     if "user_id" not in session: return redirect(url_for("index"))
     questions = get_questions()
     answers, score = {}, 0
-    s1 = s2 = s3 = s4 = 0
+    s1 = s2 = s3 = 0
 
     for q in questions:
         qid = str(q["question_number"])
@@ -107,8 +110,7 @@ def submit():
             score += 1
             if q["section"] == 1: s1 += 1
             elif q["section"] == 2: s2 += 1
-            elif q["section"] == 3: s3 += 1
-            else: s4 += 1
+            else: s3 += 1
 
     level, module = get_cefr_mapping(score)
     started_at = datetime.fromisoformat(session.get("test_started_at", datetime.now().isoformat()))
@@ -116,16 +118,16 @@ def submit():
 
     conn = get_db()
     conn.execute("""INSERT INTO attempts (user_id, user_name, user_email, user_phone, center,
-        total_score, cefr_level, module_assigned, section1_score, section2_score, section3_score, section4_score,
+        total_score, cefr_level, module_assigned, section1_score, section2_score, section3_score,
         answers, started_at, time_taken_seconds)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (session["user_id"], session["user_name"], session["user_email"], session["user_phone"],
-         session["user_center"], score, level, module, s1, s2, s3, s4, json.dumps(answers),
+         session["user_center"], score, level, module, s1, s2, s3, json.dumps(answers),
          started_at.isoformat(), time_taken))
     conn.commit()
     conn.close()
     session.clear()
-    return render_template("results.html", score=score, total=len(questions), level=level, module=module, s1=s1, s2=s2, s3=s3, s4=s4)
+    return render_template("results.html", score=score, total=len(questions), level=level, module=module, s1=s1, s2=s2, s3=s3)
 
 # --- Admin Routes ---
 @app.route("/admin/login", methods=["GET", "POST"])
@@ -139,9 +141,9 @@ def admin_login():
         if admin:
             session["admin_email"] = email
             session["admin_name"] = admin["full_name"] or email
-            flash("تم تسجيل الدخول بنجاح.", "success")
+            flash("Logged in successfully.", "success")
             return redirect(url_for("admin"))
-        flash("البريد الإلكتروني أو كلمة المرور غير صحيحة.", "error")
+        flash("Invalid email or password.", "error")
     return render_template("admin_login.html")
 
 @app.route("/admin/logout")
@@ -163,7 +165,7 @@ def admin():
     conn = get_db()
     attempts = conn.execute("SELECT * FROM attempts ORDER BY completed_at DESC").fetchall()
     conn.close()
-    return render_template("admin.html", attempts=[dict(a) for a in attempts])
+    return render_template("admin.html", attempts=[dict(a) for a in attempts], centers=CENTERS)
 
 @app.route("/admin/view/<int:attempt_id>")
 @admin_required
@@ -187,7 +189,7 @@ def enroll_student(attempt_id):
     conn.execute("UPDATE attempts SET enrolled = 1 WHERE id = ?", (attempt_id,))
     conn.commit()
     conn.close()
-    flash("تم تسجيل الطالب بنجاح.", "success")
+    flash("Student marked as enrolled.", "success")
     return redirect(url_for("admin"))
 
 @app.route("/admin/export")
@@ -198,14 +200,14 @@ def export_excel():
     conn.close()
     wb = Workbook()
     ws = wb.active
-    ws.title = "النتائج"
-    ws.append(["التاريخ", "رقم المستخدم", "الاسم", "البريد", "الهاتف", "الفرع", "النتيجة", "المستوى", "الوحدة", "الوقت", "مسجل"])
+    ws.title = "CEFR Results"
+    ws.append(["Date", "User ID", "Name", "Email", "Phone", "Center", "Score", "Level", "Module", "Time Taken", "Enrolled"])
     for a in attempts:
-        ws.append([a["completed_at"], a["user_id"], a["user_name"], a["user_email"], a["user_phone"], a["center"], a["total_score"], a["cefr_level"], a["module_assigned"], format_time_filter(a["time_taken_seconds"]), "نعم" if a["enrolled"] else "لا"])
+        ws.append([a["completed_at"], a["user_id"], a["user_name"], a["user_email"], a["user_phone"], a["center"], a["total_score"], a["cefr_level"], a["module_assigned"], format_time_filter(a["time_taken_seconds"]), "Yes" if a["enrolled"] else "No"])
     output = io.BytesIO()
     wb.save(output)
     output.seek(0)
-    return send_file(output, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", as_attachment=True, download_name=f"KG_Arabic_Results_{datetime.now().strftime('%Y%m%d')}.xlsx")
+    return send_file(output, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", as_attachment=True, download_name=f"KG_English_Results_{datetime.now().strftime('%Y%m%d')}.xlsx")
 
 @app.route("/admin/reset-data", methods=["POST"])
 @admin_required
@@ -215,8 +217,41 @@ def reset_data():
     conn.execute("DELETE FROM users")
     conn.commit()
     conn.close()
-    flash("تم مسح جميع سجلات الطلاب.", "success")
+    flash("All student records cleared.", "success")
     return redirect(url_for("admin"))
 
+@app.route("/admin/change-password", methods=["POST"])
+@admin_required
+def admin_change_password():
+    current = request.form.get("current_password", "")
+    new_pw = request.form.get("new_password", "")
+    confirm = request.form.get("confirm_password", "")
+
+    if new_pw != confirm:
+        flash("New passwords do not match.", "error")
+        return redirect(url_for("admin"))
+    if len(new_pw) < 6:
+        flash("Password must be at least 6 characters.", "error")
+        return redirect(url_for("admin"))
+
+    conn = get_db()
+    admin = conn.execute(
+        "SELECT * FROM admins WHERE email=? AND password_hash=?",
+        (session["admin_email"], hash_password(current))
+    ).fetchone()
+    
+    if not admin:
+        flash("Current password is incorrect.", "error")
+    else:
+        conn.execute(
+            "UPDATE admins SET password_hash=? WHERE email=?",
+            (hash_password(new_pw), session["admin_email"])
+        )
+        conn.commit()
+        flash("Password updated successfully.", "success")
+    conn.close()
+    return redirect(url_for("admin"))
+
+
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5001) # Changed port to 5001 so it doesn't conflict with English app
+    app.run(debug=True, host="0.0.0.0", port=5000) # <-- FORCED TO PORT 5000

@@ -1,25 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}أكاديمية شبكة المعرفة{% endblock %}</title>
+    <title>{% block title %}KG Academy - CEFR Test{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        /* RTL Specific Overrides for Arabic App */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .floating-timer { 
-            right: auto !important; 
-            left: 30px !important; 
-        }
-        @media (max-width: 768px) {
-            .floating-timer { left: 20px !important; right: auto !important; }
-        }
-        .test-card { padding-left: 40px !important; padding-right: 24px !important; }
-        .section-divider, .info-box, .note { border-right: 4px solid #667eea; border-left: none; }
-        .bar-group > span:first-child { text-align: right; }
-        .admin-table th, .admin-table td { text-align: right; }
-    </style>
 </head>
 <body>
     <header class="site-header">
@@ -42,7 +27,7 @@
         {% block content %}{% endblock %}
     </div>
     <footer class="site-footer">
-        © 2026 أكاديمية شبكة المعرفة. جميع الحقوق محفوظة.
+        © 2026 Knowledge Grid Academy. All rights reserved.
     </footer>
 </body>
 </html>

@@ -1,39 +1,39 @@
 {% extends "base.html" %}
-{% block title %}اختبار تحديد المستوى{% endblock %}
+{% block title %}KG Academy - CEFR Placement Test{% endblock %}
 {% block content %}
-<div class="card landing rtl">
-    <h1>📝 اختبار تحديد المستوى في اللغة العربية</h1>
-    <p class="subtitle">25 سؤالاً · 45 دقيقة · تحديد فوري للمستوى (A1 إلى C2)</p>
+<div class="card landing">
+    <h1>📝 General English CEFR Diagnostic Test</h1>
+    <p class="subtitle">50 Questions · 45 Minutes · Instant CEFR Level Assignment</p>
 
     <div class="info-box">
-        <h3>قبل أن تبدأ:</h3>
+        <h3>Before you start:</h3>
         <ul>
-            <li>يحتوي الاختبار على <strong>25 سؤالاً متعدد الخيارات</strong> مقسمة على 4 أقسام.</li>
-            <li>لديك <strong>45 دقيقة</strong> لإكمال الاختبار. سيعمل المؤقت تلقائياً.</li>
-            <li>اختر <strong>الإجابة الصحيحة (أ، ب، ج، د)</strong> لكل سؤال.</li>
-            <li>ستحدد نتيجتك مستواك وفقاً للإطار الأوروبي المرجعي (A1 - C2) والوحدة المقترحة.</li>
+            <li>The test contains <strong>50 multiple-choice questions</strong> across 3 sections.</li>
+            <li>You have <strong>45 minutes</strong> to complete it. A timer will run automatically.</li>
+            <li>Choose the <strong>best answer (A, B, C, or D)</strong> for each question.</li>
+            <li>Your score will determine your CEFR level (A0 → B2+) and recommended module.</li>
         </ul>
     </div>
 
     <form method="POST" action="{{ url_for('start') }}" class="start-form">
-        <label for="name">الاسم الكامل <span class="required">*</span></label>
-        <input type="text" id="name" name="name" required placeholder="مثال: أحمد محمد">
+        <label for="name">Full Name <span class="required">*</span></label>
+        <input type="text" id="name" name="name" required placeholder="e.g. Sara Ahmed">
 
-        <label for="email">البريد الإلكتروني <span class="required">*</span></label>
-        <input type="email" id="email" name="email" required placeholder="example@email.com">
+        <label for="email">Email Address <span class="required">*</span></label>
+        <input type="email" id="email" name="email" required placeholder="you@example.com">
 
-        <label for="phone">رقم الهاتف <span class="required">*</span></label>
+        <label for="phone">Phone Number <span class="required">*</span></label>
         <input type="tel" id="phone" name="phone" required placeholder="+968 9XXX XXXX">
 
-        <label for="center">فرع أكاديمية شبكة المعرفة <span class="required">*</span></label>
+        <label for="center">KG Academy Branch <span class="required">*</span></label>
         <select id="center" name="center" required>
-            <option value="">-- اختر الفرع --</option>
+            <option value="">-- Select your branch --</option>
             {% for c in centers %}
             <option value="{{ c }}">{{ c }}</option>
             {% endfor %}
         </select>
 
-        <button type="submit" class="btn-primary">ابدأ الاختبار ←</button>
+        <button type="submit" class="btn-primary">Start Test →</button>
     </form>
 </div>
 {% endblock %}

@@ -1,37 +1,37 @@
 {% extends "base.html" %}
-{% block title %}لوحة تحكم المشرف{% endblock %}
+{% block title %}Admin Dashboard{% endblock %}
 {% block content %}
-<div class="card admin-card rtl">
+<div class="card admin-card">
     <div class="admin-top">
-        <h1>📊 جميع محاولات الاختبار</h1>
+        <h1>📊 All Test Attempts</h1>
         <div class="admin-actions">
             <span class="admin-user">👤 {{ session.admin_name }}</span>
-            <a href="{{ url_for('export_excel') }}" class="btn-secondary">⬇ تصدير Excel</a>
-            <a href="{{ url_for('admin_logout') }}" class="btn-danger">تسجيل خروج</a>
+            <a href="{{ url_for('export_excel') }}" class="btn-secondary">⬇ Export Excel</a>
+            <a href="{{ url_for('admin_logout') }}" class="btn-danger">Logout</a>
         </div>
     </div>
 
     <form method="GET" action="{{ url_for('admin') }}" class="filter-form">
-        <input type="text" name="search" placeholder="🔍 بحث بالاسم، البريد، الهاتف، أو الرقم..." value="{{ search }}">
+        <input type="text" name="search" placeholder="🔍 Search name, email, phone, ID..." value="{{ search }}">
         <select name="level">
-            <option value="">جميع المستويات</option>
-            {% for lvl in ['A1','A2','B1','B2','C1','C2'] %}
+            <option value="">All Levels</option>
+            {% for lvl in ['A0','A1','A2','B1','B1+','B2','B2+'] %}
             <option value="{{ lvl }}" {% if filter_level == lvl %}selected{% endif %}>{{ lvl }}</option>
             {% endfor %}
         </select>
         <select name="center">
-            <option value="">جميع الفروع</option>
+            <option value="">All Centers</option>
             {% for c in centers %}
             <option value="{{ c }}" {% if filter_center == c %}selected{% endif %}>{{ c }}</option>
             {% endfor %}
         </select>
         <select name="enrolled">
-            <option value="">جميع الحالات</option>
-            <option value="0" {% if filter_enrolled == '0' %}selected{% endif %}>لم يسجل</option>
-            <option value="1" {% if filter_enrolled == '1' %}selected{% endif %}>مسجل</option>
+            <option value="">All Status</option>
+            <option value="0" {% if filter_enrolled == '0' %}selected{% endif %}>Not Enrolled</option>
+            <option value="1" {% if filter_enrolled == '1' %}selected{% endif %}>Enrolled</option>
         </select>
-        <button type="submit" class="btn-primary">تصفية</button>
-        <a href="{{ url_for('admin') }}" class="btn-secondary">مسح</a>
+        <button type="submit" class="btn-primary">Filter</button>
+        <a href="{{ url_for('admin') }}" class="btn-secondary">Clear</a>
     </form>
 
     {% if attempts %}
@@ -39,8 +39,8 @@
         <table class="admin-table">
             <thead>
                 <tr>
-                    <th>التاريخ</th><th>رقم المستخدم</th><th>الاسم</th><th>البريد</th><th>الهاتف</th>
-                    <th>الفرع</th><th>النتيجة</th><th>المستوى</th><th>الوحدة</th><th>الوقت</th><th>الحالة</th><th>إجراءات</th>
+                    <th>Date</th><th>User ID</th><th>Name</th><th>Email</th><th>Phone</th>
+                    <th>Center</th><th>Score</th><th>Level</th><th>Module</th><th>Time</th><th>Status</th><th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,22 +52,22 @@
                     <td>{{ a.user_email }}</td>
                     <td>{{ a.user_phone }}</td>
                     <td class="center-cell">{{ a.center }}</td>
-                    <td><strong>{{ a.total_score }}/25</strong></td>
+                    <td><strong>{{ a.total_score }}/50</strong></td>
                     <td><span class="level-badge">{{ a.cefr_level }}</span></td>
                     <td class="module-cell">{{ a.module_assigned }}</td>
                     <td><strong>{{ a.time_taken_seconds | format_time }}</strong></td>
                     <td>
                         {% if a.enrolled %}
-                            <span class="status enrolled">✅ مسجل</span>
+                            <span class="status enrolled">✅ Enrolled</span>
                         {% else %}
-                            <span class="status pending">⏳ قيد الانتظار</span>
+                            <span class="status pending">⏳ Pending</span>
                         {% endif %}
                     </td>
                     <td class="action-cell">
-                        <a href="{{ url_for('view_attempt', attempt_id=a.id) }}" class="btn-small">👁 عرض</a>
+                        <a href="{{ url_for('view_attempt', attempt_id=a.id) }}" class="btn-small">👁 View</a>
                         {% if not a.enrolled %}
                         <form method="POST" action="{{ url_for('enroll_student', attempt_id=a.id) }}" style="display:inline">
-                            <button type="submit" class="btn-small btn-enroll" onclick="return confirm('تأكيد تسجيل {{ a.user_name }}؟')">✓ تسجيل</button>
+                            <button type="submit" class="btn-small btn-enroll" onclick="return confirm('Confirm enrollment for {{ a.user_name }}?')">✓ Enroll</button>
                         </form>
                         {% endif %}
                     </td>
@@ -77,28 +77,20 @@
         </table>
     </div>
     {% else %}
-    <p class="no-data">لا توجد محاولات تطابق معايير التصفية.</p>
+    <p class="no-data">No attempts match your filters.</p>
     {% endif %}
 
     <details class="change-pw">
-        <summary>🔑 تغيير كلمة مرور المشرف</summary>
+        <summary>🔑 Change Admin Password</summary>
         <form method="POST" action="{{ url_for('admin_change_password') }}" class="start-form">
-            <label>كلمة المرور الحالية</label>
+            <label>Current Password</label>
             <input type="password" name="current_password" required>
-            <label>كلمة المرور الجديدة</label>
+            <label>New Password</label>
             <input type="password" name="new_password" required minlength="6">
-            <label>تأكيد كلمة المرور الجديدة</label>
+            <label>Confirm New Password</label>
             <input type="password" name="confirm_password" required minlength="6">
-            <button type="submit" class="btn-primary">تحديث كلمة المرور</button>
+            <button type="submit" class="btn-primary">Update Password</button>
         </form>
     </details>
-
-    <div class="danger-zone">
-        <h3>⚠️ منطقة الخطر</h3>
-        <p>استخدم هذا الخيار لمسح جميع سجلات الطلاب والبدء من جديد. لا يمكن التراجع عن هذا الإجراء.</p>
-        <form method="POST" action="{{ url_for('reset_data') }}" onsubmit="return confirm('⚠️ هل أنت متأكد تماماً من حذف جميع سجلات الطلاب؟');">
-            <button type="submit" class="btn-danger">🗑️ مسح جميع سجلات الطلاب</button>
-        </form>
-    </div>
 </div>
 {% endblock %}

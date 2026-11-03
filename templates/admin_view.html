@@ -1,41 +1,40 @@
 {% extends "base.html" %}
-{% block title %}عرض محاولة — {{ attempt.user_name }}{% endblock %}
+{% block title %}View Attempt — {{ attempt.user_name }}{% endblock %}
 {% block content %}
-<div class="card rtl">
-    <h1>📋 تفاصيل الطالب</h1>
+<div class="card">
+    <h1>📋 Student Details</h1>
 
     <div class="student-info">
-        <div class="info-row"><strong>رقم المستخدم:</strong> <code>{{ attempt.user_id }}</code></div>
-        <div class="info-row"><strong>الاسم:</strong> {{ attempt.user_name }}</div>
-        <div class="info-row"><strong>البريد الإلكتروني:</strong> {{ attempt.user_email }}</div>
-        <div class="info-row"><strong>الهاتف:</strong> {{ attempt.user_phone }}</div>
-        <div class="info-row"><strong>الفرع:</strong> {{ attempt.center }}</div>
-        <div class="info-row"><strong>بدأ في:</strong> {{ attempt.started_at[:16].replace('T', ' ') }}</div>
-        <div class="info-row"><strong>الوقت المستغرق:</strong> <span style="color:#667eea; font-weight:bold;">{{ attempt.time_taken_seconds | format_time }}</span></div>
+        <div class="info-row"><strong>User ID:</strong> <code>{{ attempt.user_id }}</code></div>
+        <div class="info-row"><strong>Name:</strong> {{ attempt.user_name }}</div>
+        <div class="info-row"><strong>Email:</strong> {{ attempt.user_email }}</div>
+        <div class="info-row"><strong>Phone:</strong> {{ attempt.user_phone }}</div>
+        <div class="info-row"><strong>Center:</strong> {{ attempt.center }}</div>
+        <div class="info-row"><strong>Started:</strong> {{ attempt.started_at[:16].replace('T', ' ') }}</div>
+        <div class="info-row"><strong>Time Taken:</strong> <span style="color:#667eea; font-weight:bold;">{{ attempt.time_taken_seconds | format_time }}</span></div>
     </div>
 
     <div class="score-display">
-        <div class="big-score">{{ attempt.total_score }}<span>/25</span></div>
-        <div class="score-label">النتيجة النهائية</div>
+        <div class="big-score">{{ attempt.total_score }}<span>/50</span></div>
+        <div class="score-label">Total Score</div>
     </div>
 
     <div class="level-box">
-        <div class="level-row"><span class="label">المستوى:</span><span class="value level-badge">{{ attempt.cefr_level }}</span></div>
-        <div class="level-row"><span class="label">الوحدة:</span><span class="value">{{ attempt.module_assigned }}</span></div>
+        <div class="level-row"><span class="label">CEFR Level:</span><span class="value level-badge">{{ attempt.cefr_level }}</span></div>
+        <div class="level-row"><span class="label">Module:</span><span class="value">{{ attempt.module_assigned }}</span></div>
     </div>
 
     <div class="section-scores">
-        <h3>تفاصيل الأقسام</h3>
-        <div class="bar-group"><span>القسم الأول (A1):</span><div class="bar"><div class="fill" style="width: {{ (attempt.section1_score/6)*100 }}%"></div></div><span class="num">{{ attempt.section1_score }}/6</span></div>
-        <div class="bar-group"><span>القسم الثاني (A2):</span><div class="bar"><div class="fill" style="width: {{ (attempt.section2_score/6)*100 }}%"></div></div><span class="num">{{ attempt.section2_score }}/6</span></div>
-        <div class="bar-group"><span>القسم الثالث (B1/B2):</span><div class="bar"><div class="fill" style="width: {{ (attempt.section3_score/7)*100 }}%"></div></div><span class="num">{{ attempt.section3_score }}/7</span></div>
-        <div class="bar-group"><span>القسم الرابع (C1/C2):</span><div class="bar"><div class="fill" style="width: {{ (attempt.section4_score/6)*100 }}%"></div></div><span class="num">{{ attempt.section4_score }}/6</span></div>
+        <h3>Section Breakdown</h3>
+        <div class="bar-group"><span>Section 1:</span><div class="bar"><div class="fill" style="width: {{ (attempt.section1_score/15)*100 }}%"></div></div><span class="num">{{ attempt.section1_score }}/15</span></div>
+        <div class="bar-group"><span>Section 2:</span><div class="bar"><div class="fill" style="width: {{ (attempt.section2_score/20)*100 }}%"></div></div><span class="num">{{ attempt.section2_score }}/20</span></div>
+        <div class="bar-group"><span>Section 3:</span><div class="bar"><div class="fill" style="width: {{ (attempt.section3_score/15)*100 }}%"></div></div><span class="num">{{ attempt.section3_score }}/15</span></div>
     </div>
 
-    <h3>📝 مراجعة الإجابات (عرض المشرف)</h3>
+    <h3>📝 Answer Review (Admin View)</h3>
     <div class="table-scroll">
         <table class="review-table">
-            <thead><tr><th>#</th><th>السؤال</th><th>إجابة الطالب</th><th>الإجابة الصحيحة</th><th>الحالة</th></tr></thead>
+            <thead><tr><th>#</th><th>Question</th><th>Student Answer</th><th>Correct</th><th>Status</th></tr></thead>
             <tbody>
                 {% for r in review %}
                 <tr class="{{ 'correct' if r.is_correct else 'wrong' }}">
@@ -50,6 +49,6 @@
         </table>
     </div>
 
-    <a href="{{ url_for('admin') }}" class="btn-primary">← العودة للوحة التحكم</a>
+    <a href="{{ url_for('admin') }}" class="btn-primary">← Back to Admin</a>
 </div>
 {% endblock %}
